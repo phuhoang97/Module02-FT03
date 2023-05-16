@@ -1,7 +1,10 @@
 import React from "react";
 import Student from "./Student";
 
-function ListStudent({ listStutentProps }) {
+function ListStudent({ listStudentProps, handleUpdateStudent }) {
+  const handleUpdate = (selectStudent, toggle, actionName) => {
+    handleUpdateStudent(selectStudent, toggle, actionName);
+  };
   return (
     <div>
       <div className='card-body'>
@@ -20,8 +23,12 @@ function ListStudent({ listStutentProps }) {
             </thead>
             <tbody>
               {/* Bước 5: Tách <tr> thành 1 component để hiển thị dữ liệu */}
-              {listStutentProps.map((element, index) => (
-                <Student keyStudent={index} studentInfor={element} />
+              {listStudentProps.map((element, index) => (
+                <Student
+                  keyStudent={index}
+                  studentInfor={element}
+                  handleUpdate={handleUpdate}
+                />
               ))}
             </tbody>
           </table>

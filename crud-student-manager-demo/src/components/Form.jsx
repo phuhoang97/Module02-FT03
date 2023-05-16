@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 
-function Form({ actionName, handleSubmitAdd }) {
-  console.log(actionName, handleSubmitAdd);
+function Form({
+  actionName,
+  handleSubmitAdd,
+  handleSubmitUpdate,
+  selectStudent,
+}) {
+  console.log(actionName);
   // C-5 Sử dụng Des gọi dữ liệu từ Parent xuống
   // Khai báo state dùng để lưu trữ các dữ liệu input
   // Gắn các thuộc tính vào thẻ input
@@ -10,7 +15,7 @@ function Form({ actionName, handleSubmitAdd }) {
     studentId: "",
     studentName: "",
     age: 0,
-    gender: true,
+    gender: false,
     birthDate: "",
     birthPlace: "",
     address: "",
@@ -27,6 +32,16 @@ function Form({ actionName, handleSubmitAdd }) {
     handleSubmitAdd(formData, false);
   };
 
+  const handleUpdate = (e) => {
+    e.preventDefault();
+    handleSubmitUpdate(formData, false);
+  };
+
+  useEffect(() => {
+    setFormData(selectStudent);
+  }, [selectStudent]);
+
+  console.log(selectStudent);
   return (
     <div>
       {/* cắt từ đây */}
@@ -76,8 +91,8 @@ function Form({ actionName, handleSubmitAdd }) {
               name='gender'
               onChange={handleChangeInput}
             >
-              <option>Nam</option>
-              <option>Nữ</option>
+              <option value={true}>Nam</option>
+              <option value={false}>Nữ</option>
             </select>
           </div>
         </div>
@@ -129,7 +144,11 @@ function Form({ actionName, handleSubmitAdd }) {
             Submit
           </button>
         ) : (
-          <button type='submit' className='btn btn-primary me-2'>
+          <button
+            type='submit'
+            className='btn btn-primary me-2'
+            onClick={handleUpdate}
+          >
             Update
           </button>
         )}

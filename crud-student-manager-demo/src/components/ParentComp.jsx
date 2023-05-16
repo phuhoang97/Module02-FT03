@@ -57,7 +57,23 @@ function ParentComp() {
     setToggle(toggle);
   };
 
-  
+  // U-1:
+  // Khai báo state để lưu trữ thông tin student
+  const [selectStudent, setSelectStudent] = useState({});
+
+  const handleUpdateStudent = (selectStudent, toggle, actionName) => {
+    setSelectStudent(selectStudent);
+    setToggle(toggle);
+    setActionName(actionName);
+  };
+
+  const handleSubmitUpdate = (studentUpdate, toggle) => {
+    const updateStudent = students.map((student) =>
+      student.studentId === studentUpdate.studentId ? studentUpdate : student
+    );
+    setStudents(updateStudent);
+    setToggle(toggle);
+  };
 
   return (
     <div>
@@ -70,7 +86,10 @@ function ParentComp() {
             {/* END CONTROL */}
             {/* START LIST STUDENT */}
             {/* Bước 4: Truyền dữ liệu students (là state khai báo ở trên) xuống cho listStudent */}
-            <ListStudent listStutentProps={students} />
+            <ListStudent
+              listStudentProps={students}
+              handleUpdateStudent={handleUpdateStudent}
+            />
             {/* END LIST STUDENT */}
           </div>
         </div>
@@ -83,6 +102,8 @@ function ParentComp() {
                 <Form
                   actionName={actionName}
                   handleSubmitAdd={handleSubmitAdd}
+                  handleSubmitUpdate={handleSubmitUpdate}
+                  selectStudent={selectStudent}
                 />
               ) : (
                 <></>

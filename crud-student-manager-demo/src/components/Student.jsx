@@ -1,8 +1,13 @@
 import React from "react";
 
 function Student(props) {
+  console.log(props);
   // Bước 6: Sử dụng Destructing để phân tách các thuộc tính
   const { keyStudent, studentInfor } = props;
+
+  const handleUpdateStudent = (element) => {
+    props.handleUpdate(element, true, "UPDATE");
+  };
 
   return (
     <tr key={keyStudent}>
@@ -16,7 +21,11 @@ function Student(props) {
           <button type='button' className='btn btn-danger btn-icon-text'>
             Xem
           </button>
-          <button type='button' className='btn btn-warning btn-icon-text'>
+          <button
+            type='button'
+            className='btn btn-warning btn-icon-text'
+            onClick={() => handleUpdateStudent(studentInfor)}
+          >
             Sửa
           </button>
           <button type='button' className='btn btn-success btn-icon-text'>
