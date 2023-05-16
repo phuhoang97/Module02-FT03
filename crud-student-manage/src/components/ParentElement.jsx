@@ -44,15 +44,12 @@ function ParentElement() {
 
     setListStudent(newList);
     setIsForm(false);
-    // setOldInfo({ id: "", nameStudent: "", age: "", gender: "" });
   }
 
   const handleDeleteStudent = (stId) => {
     const newDeleteStudent = listStudent.filter((item) => item.id !== stId);
     setListStudent(newDeleteStudent);
   };
-
-  //   useEffect((prevList) => [...prevList], [listStudent]);
 
   return (
     <div className='row'>
