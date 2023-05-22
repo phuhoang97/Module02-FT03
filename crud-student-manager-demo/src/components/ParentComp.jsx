@@ -60,6 +60,7 @@ function ParentComp() {
   // U-1:
   // Khai báo state để lưu trữ thông tin student
   const [selectStudent, setSelectStudent] = useState({});
+  console.log(selectStudent);
 
   const handleUpdateStudent = (selectStudent, toggle, actionName) => {
     setSelectStudent(selectStudent);

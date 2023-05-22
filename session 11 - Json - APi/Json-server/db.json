@@ -1,0 +1,67 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "Hiếu Cà Mau",
+      "email": "hieu@gmail.com",
+      "age": 24,
+      "phone": "0324851352"
+    },
+    {
+      "id": 2,
+      "username": "Bình gold",
+      "email": "binh@gmail.com",
+      "age": 24,
+      "phone": "0327857652"
+    },
+    {
+      "username": "Hai",
+      "email": "hai@gmail.com",
+      "age": 25,
+      "phone": "0854878451",
+      "id": 3
+    },
+    {
+      "id": 4,
+      "username": "Khánh RickKid",
+      "email": "khanh@gmail.com",
+      "age": 26,
+      "phone": "0325657752"
+    },
+    {
+      "id": 6,
+      "username": "Nhung",
+      "email": "nhung@gmail.com",
+      "age": 27,
+      "phone": "0254654351"
+    },
+    {
+      "username": "Nhung",
+      "email": "nhung@gmail.com",
+      "age": 27,
+      "phone": "0254654351",
+      "id": 7
+    },
+    {
+      "username": "Nhung",
+      "email": "nhung@gmail.com",
+      "age": 27,
+      "phone": "0254654351",
+      "id": 8
+    },
+    {
+      "username": "Nhung",
+      "email": "nhung@gmail.com",
+      "age": 27,
+      "phone": "0254654351",
+      "id": 9
+    },
+    {
+      "username": "Nhung",
+      "email": "nhung@gmail.com",
+      "age": 27,
+      "phone": "0254654351",
+      "id": 10
+    }
+  ]
+}
