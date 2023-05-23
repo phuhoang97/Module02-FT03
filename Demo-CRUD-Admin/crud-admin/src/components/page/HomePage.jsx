@@ -5,7 +5,7 @@ import Button from "react-bootstrap/Button";
 import { Link } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 
-function HomePage() {
+function HomePage({ search }) {
   // bật tắt nút xem
   const [show, setShow] = useState(false);
 
@@ -24,14 +24,14 @@ function HomePage() {
   const [check, setCheck] = useState(true);
 
   // Hàm loadUser dùng để lấy dữ liệu từ api
-  const loadUser = async () => {
-    const result = await axios.get("http://localhost:7000/users");
-    setData(result.data);
-  };
+  // Cách 1
+  // const loadUser = async () => {
+  //   const result = await axios.get(
+  //     `http://localhost:7000/users?username_like=${search}`
+  //   );
+  //   setData(result.data);
+  // };
 
-  useEffect(() => {
-    loadUser();
-  }, [check]);
   const handleDelete = async (e) => {
     await axios.delete(`http://localhost:7000/users/${e}`);
     // cách 1:
@@ -39,10 +39,71 @@ function HomePage() {
     // cách 2:
     setCheck(!check);
   };
+
+  // useEffect(() => {
+  //   loadUser();
+  // }, [check]);
+
+  // Search
+  const [searchInput, setSearchInput] = useState("");
+  const handleChangeInput = (e) => {
+    setSearchInput(e.target.value);
+  };
+
+  const loadUser = async () => {
+    let url = `http://localhost:7000/users`;
+
+    // http://localhost:7000/users?q=${searchInput}
+    if (searchInput) {
+      url += `?q=${searchInput}`;
+    }
+
+    // logic sort
+    if (sortType === "asc") {
+      url += `?_sort=age&_order=asc`;
+    } else {
+      url += `?_sort=age&_order=desc`;
+    }
+
+    const result = await axios.get(url);
+    setData(result.data);
+  };
+
+  // Sort
+  // asc => tăng dần
+  // desc => giảm dần
+  const [sortType, setSortType] = useState("asc");
+
+  const handleSort = () => {
+    sortType === "asc" ? setSortType("desc") : setSortType("asc");
+  };
+
+  useEffect(() => {
+    loadUser();
+  }, [check, searchInput, sortType]);
+
   return (
     <div>
       <h2 style={{ textAlign: "center" }}>Home Page</h2>
 
+      {/* Search */}
+      <div className='w-25 d-flex' role='search'>
+        <input
+          className='form-control me-2'
+          type='search'
+          placeholder='Search'
+          aria-label='Search'
+          value={searchInput}
+          onChange={handleChangeInput}
+        />
+        <button
+          className='btn btn-outline-success'
+          type='submit'
+          onClick={loadUser}
+        >
+          Search
+        </button>
+      </div>
       {/* Table user */}
       <Table striped bordered hover style={{ textAlign: "center" }}>
         <thead>
@@ -51,7 +112,9 @@ function HomePage() {
             <th>ID</th>
             <th>Username</th>
             <th>Email</th>
-            <th>Age</th>
+            <th onClick={handleSort}>
+              Age <i class='fa-solid fa-sort'></i>
+            </th>
             <th>Phone</th>
             <th colSpan={3}>Action</th>
           </tr>

@@ -7,13 +7,16 @@ import NotFound from "./components/page/NotFound";
 import LayoutNavbar from "./components/layout/LayoutNavbar";
 import AddUser from "./components/users/AddUser";
 import EditUser from "./components/users/EditUser";
+import { useState } from "react";
 
 function App() {
+  const [search, setSearch] = useState("");
+  const handleChangeSearch = (e) => setSearch(e.target.value);
   return (
     <div>
-      <LayoutNavbar />
+      <LayoutNavbar handleChangeSearch={handleChangeSearch} />
       <Routes>
-        <Route path='/' element={<HomePage />}></Route>
+        <Route path='/' element={<HomePage search={search} />}></Route>
         <Route path='/about' element={<AboutPage />}></Route>
         <Route path='/contact' element={<ContactPage />}></Route>
         <Route path='/user/add' element={<AddUser />}></Route>

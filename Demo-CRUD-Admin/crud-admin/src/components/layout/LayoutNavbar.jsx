@@ -2,7 +2,7 @@ import React from "react";
 import Button from "react-bootstrap/Button";
 import { Link } from "react-router-dom";
 
-function LayoutNavbar() {
+function LayoutNavbar({ handleChangeSearch }) {
   return (
     <div>
       <nav className='navbar navbar-expand-lg bg-body-tertiary'>
@@ -49,9 +49,21 @@ function LayoutNavbar() {
                 </Link>
               </li>
             </ul>
-            <Link to={"/user/add"}>
+            <Link to={"/user/add"} style={{ marginRight: "50px" }}>
               <Button variant='outline-success'>Add User</Button>
             </Link>
+            <form className='d-flex' role='search'>
+              <input
+                className='form-control me-2'
+                type='search'
+                placeholder='Search'
+                aria-label='Search'
+                onChange={handleChangeSearch}
+              />
+              <button className='btn btn-outline-success' type='submit'>
+                Search
+              </button>
+            </form>
           </div>
         </div>
       </nav>
