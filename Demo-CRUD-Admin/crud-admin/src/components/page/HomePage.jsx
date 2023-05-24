@@ -4,11 +4,10 @@ import axios from "axios";
 import Button from "react-bootstrap/Button";
 import { Link } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
+import Pagination from "react-bootstrap/Pagination";
 
 function HomePage({ search }) {
-  // bật tắt nút xem
   const [show, setShow] = useState(false);
-
   const handleClose = () => setShow(false);
   const [view, setView] = useState({});
   const handleShow = (id) => {
@@ -18,75 +17,78 @@ function HomePage({ search }) {
       .then((res) => setView(res.data));
   };
 
-  // state dùng để lưu trữ dữ liệu từ api
   const [data, setData] = useState([]);
-  // state check xóa phần tử user
   const [check, setCheck] = useState(true);
 
-  // Hàm loadUser dùng để lấy dữ liệu từ api
-  // Cách 1
-  // const loadUser = async () => {
-  //   const result = await axios.get(
-  //     `http://localhost:7000/users?username_like=${search}`
-  //   );
-  //   setData(result.data);
-  // };
-
-  const handleDelete = async (e) => {
-    await axios.delete(`http://localhost:7000/users/${e}`);
-    // cách 1:
-    // loadUser();
-    // cách 2:
-    setCheck(!check);
-  };
-
-  // useEffect(() => {
-  //   loadUser();
-  // }, [check]);
-
-  // Search
   const [searchInput, setSearchInput] = useState("");
   const handleChangeInput = (e) => {
     setSearchInput(e.target.value);
   };
 
+  // Phần phân trang
+  const [currentPage, setCurrentPage] = useState(1);
+  const [perPage, setPerPage] = useState(4);
+  const [totalPages, setTotalPages] = useState(1);
   const loadUser = async () => {
     let url = `http://localhost:7000/users`;
 
-    // http://localhost:7000/users?q=${searchInput}
     if (searchInput) {
       url += `?q=${searchInput}`;
-    }
-
-    // logic sort
-    if (sortType === "asc") {
-      url += `?_sort=age&_order=asc`;
     } else {
-      url += `?_sort=age&_order=desc`;
+      if (sortType === "asc") {
+        url += `?_sort=age&_order=asc`;
+      } else {
+        url += `?_sort=age&_order=desc`;
+      }
     }
 
-    const result = await axios.get(url);
+    const countResponse = await axios.get(
+      `${url}&_page=1&_limit=1&_count=true`
+    );
+
+    const totalCount = countResponse.headers["x-total-count"];
+    const totalPages = Math.ceil(totalCount / perPage);
+
+    // Update the state with the retrieved data and totalPages
+    const result = await axios.get(
+      `${url}&_page=${currentPage}&_limit=${perPage}`
+    );
     setData(result.data);
+    setTotalPages(totalPages);
   };
 
-  // Sort
-  // asc => tăng dần
-  // desc => giảm dần
+  const handleDelete = async (e) => {
+    await axios.delete(`http://localhost:7000/users/${e}`);
+    setCheck(!check);
+  };
+
   const [sortType, setSortType] = useState("asc");
 
   const handleSort = () => {
-    sortType === "asc" ? setSortType("desc") : setSortType("asc");
+    setSortType(sortType === "asc" ? "desc" : "asc");
   };
+
+  const paginationItems = [];
+  for (let i = 1; i <= totalPages; i++) {
+    paginationItems.push(
+      <Pagination.Item
+        key={i}
+        active={i === currentPage}
+        onClick={() => setCurrentPage(i)}
+      >
+        {i}
+      </Pagination.Item>
+    );
+  }
 
   useEffect(() => {
     loadUser();
-  }, [check, searchInput, sortType]);
+  }, [check, searchInput, sortType, currentPage, perPage]);
 
   return (
     <div>
       <h2 style={{ textAlign: "center" }}>Home Page</h2>
 
-      {/* Search */}
       <div className='w-25 d-flex' role='search'>
         <input
           className='form-control me-2'
@@ -104,7 +106,7 @@ function HomePage({ search }) {
           Search
         </button>
       </div>
-      {/* Table user */}
+
       <Table striped bordered hover style={{ textAlign: "center" }}>
         <thead>
           <tr>
@@ -113,7 +115,7 @@ function HomePage({ search }) {
             <th>Username</th>
             <th>Email</th>
             <th onClick={handleSort}>
-              Age <i class='fa-solid fa-sort'></i>
+              Age <i className='fa-solid fa-sort'></i>
             </th>
             <th>Phone</th>
             <th colSpan={3}>Action</th>
@@ -150,6 +152,18 @@ function HomePage({ search }) {
           ))}
         </tbody>
       </Table>
+
+      <Pagination>
+        <Pagination.Prev
+          onClick={() => setCurrentPage(currentPage - 1)}
+          disabled={currentPage === 1}
+        />
+        {paginationItems}
+        <Pagination.Next
+          onClick={() => setCurrentPage(currentPage + 1)}
+          disabled={currentPage === totalPages}
+        />
+      </Pagination>
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
